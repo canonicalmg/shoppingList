@@ -21,17 +21,25 @@ def incomingSMS(request):
         try:
             print fromNum[2:]
             person = profile.objects.get(number=fromNum[2:])
-            print "after person dec"
-            sendSMSServer("Hello "+person.user.username, fromNum)
+            # if recognized, parse message
+                # create list "listname"
+            content = content.split()
+            if content[0] == "create":
+                sendSMSServer("Creating list", fromNum)
+            elif content[0] == "get":
+                sendSMSServer("Getting List", fromNum)
+            elif content[0] == "clear":
+                sendSMSServer("Clearing list", fromNum)
+            elif content[0] == "add":
+                sendSMSServer("Adding to list", fromNum)
+                # get list "listname"
+                # clear list "listname"
+                # add 3 eggs to "listname"
+            #sendSMSServer("Hello "+person.user.username, fromNum)
         except:
             print "new user"
             newUserMessage = "Welcome to shoppingList. We don't recognize your phone number. If you would like to use this service please respond with 'NewUser *username* *password* *firstname* *lastname*'"
             sendSMSServer(newUserMessage, fromNum)
-        #if recognized, parse message
-            #create list "listname"
-            #get list "listname"
-            #clear list "listname"
-            #add 3 eggs to "listname"
 
         # print "all =", request
         # print "PRINTING ", request.body
