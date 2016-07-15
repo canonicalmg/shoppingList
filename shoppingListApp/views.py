@@ -50,9 +50,9 @@ def getList(fromNum, content, person):
     listName = content[1]
     currentList = list.objects.get(owner=person, listName=listName)
     listEntries = listEntry.objects.filter(listActual=currentList)
-    returnMe = currentList.listName + " list: %0a"
+    returnMe = currentList.listName + " list: \n"
     for eachEntry in listEntries:
-        returnMe = returnMe + eachEntry.itemName + "%0a"
+        returnMe = returnMe + eachEntry.itemName + "\n"
     sendSMSServer(returnMe, fromNum)
 
 def addToList(fromNum, content, person):
