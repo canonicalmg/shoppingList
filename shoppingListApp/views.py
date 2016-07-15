@@ -161,7 +161,7 @@ def sendSMSServer(message, sendTo):
     auth_token = "ebb9a82b47931ff2d02fb287c72d4ea3"
     client = TwilioRestClient(account_sid, auth_token)
 
-    message = client.messages.create(to="+1"+sendTo, from_="+19258607247",
+    message = client.messages.create(to=sendTo, from_="+19258607247",
                                     body=message)
 
 def logout(request):
