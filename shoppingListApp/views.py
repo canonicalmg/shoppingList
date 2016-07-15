@@ -23,9 +23,19 @@ def incomingSMS(request):
             routeResponse(fromNum, content, person)
         except:
             print "new user"
-            newUserMessage = "Welcome to shoppingList. We don't recognize your phone number. If you would like to use this service please respond with 'NewUser *username* *password* *firstname* *lastname*'"
-            sendSMSServer(newUserMessage, fromNum)
+            content = content.split()
+            if content[0].lower() == "newuser":
+                newUser(content, fromNum)
+            else:
+                newUserMessage = "Welcome to shoppingList. We don't recognize your phone number."
+                newUserMessage = newUserMessage + "\nPlease Log in with 'Login *username* *password*' which will sync your account to this number."
+                newUserMessage = newUserMessage + "\nOr, respond with 'NewUser *username* *password* *firstname* *lastname*' to create an account."
+                sendSMSServer(newUserMessage, fromNum)
         return HttpResponse("done")
+
+def newUser(content, fromNum):
+    #'NewUser *username* *password* *firstname* *lastname*'
+    print "in"
 
 def routeResponse(fromNum, content, person):
     content = content.split()
