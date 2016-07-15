@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+{% load static %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootcards/1.0.0/css/bootcards-desktop.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootcards/1.0.0/js/bootcards.min.js"></script>
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="/static/shoppingListApp/custom.min.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+<script>
+    var currentSlug = "{{ currentSlug }}";
+    var listName = "{{ currentListName }}";
+</script>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+              {% for eachList in lists %}
+{#                <li class="active"><a href="#">Shopping List<span class="sr-only">(current)</span></a></li>#}
+                  {% if currentSlug == eachList.slug %}
+                    <li class="active"><a href="/home/{{ eachList.slug }}">{{ eachList.listName }}<span class="sr-only">(current)</span></a></li>
+                  {% else %}
+                    <li><a href="/home/{{ eachList.slug }}" style="color:#ffffff;">{{ eachList.listName }}<span class="sr-only">(current)</span></a></li>
+                  {% endif %}
+              {% endfor %}
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">My Shopping List</h1>
+
+
+		  <div class="box margin-right" id="shopping-list">
+
+		    <div id="errorMessage"><i class="icon-cross"></i>Please enter all inputs!</div>
+
+		    <div id="successMessage"><i class="icon-checkmark"></i>Item added to shopping list!</div>
+
+		    <div class="half margin-right">
+		     <input type='text'  id="itemNameField" class="searchButton" placeholder='Item Name' ng-model="itemName" autofocus required>
+		    </div><div class="half"><input type='text'  id="shopNameField" class="searchButton" placeholder='Shop Name' ng-model="itemShop" required></div>
+		     <div class="half margin-right">
+		     	<input type='number' id="quantityField" class="searchButton margin-right" placeholder='Quantity' ng-model="itemQuantity" required>
+		    </div><div class="dollar half">
+		      <span>$</span>
+		      <input type='number' id="priceField" class="searchButton" placeholder='Price (each)' ng-model="itemPrice" required>
+		    </div>
+
+		    <button id="addItem" ng-click="addItem()">Add Item</button>
+
+		    <div id="entryTable" class="list">
+                {% for eachEntry in listItems %}
+                <div class="panel panel-default">
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title pull-left">{{ eachEntry.listActual.listName }}</h3>
+      <a class="btn btn-primary pull-right" href="#">
+        <i class="fa fa-pencil"></i>
+        Edit
+      </a>
+    </div>
+    <div class="list-group">
+      <div class="list-group-item">
+        <h4 class="list-group-item-text">Item</h4>
+        <h3 class="list-group-item-heading">{{ eachEntry.itemName }}</h3>
+      </div>
+      <div class="list-group-item">
+        <h4 class="list-group-item-text">Store</h4>
+        <h3 class="list-group-item-heading">{{ eachEntry.shopName }}</h3>
+      </div>
+      <div class="list-group-item">
+        <p class="list-group-item-text">Quantity: {{ eachEntry.quantity }}</p>
+      </div>
+    </div>
+{#  <div class="panel-footer">#}
+{#    <small>Built with Bootcards - Base Card</small>#}
+{#  </div>#}
+</div>
+                {% endfor %}
+
+{#		      <table id=entryTable" border="0" cellspacing="0">#}
+{#		        <tr class="table-header">#}
+{#		          <td></td>#}
+{#		          <td class="left">Item Name</td>#}
+{#		          <td class="left">Shop</td>#}
+{#		          <td>Quantity</td>#}
+{#		          <td class="center">Price</td>#}
+{#		          <td class="center">Delete</td>#}
+{#		        </tr>#}
+{#              <div id="entryArea">#}
+{#                    {% for eachEntry in listItems %}#}
+{#                        <tr ng-repeat="item in list | orderBy: '-checked':true">#}
+{#                        <td><input ng-show="!item.checked" ng-checked="item.checked" ng-click="add(item, list)" type='checkbox' checklist-value="item.checked"></td>#}
+{#		                <td ng-class="{selected: item.checked==true}">{{ eachEntry.itemName }}</td>#}
+{#		                <td ng-class="{selected: item.checked==true}" class="left">{{ eachEntry.shopName }}</td>#}
+{#		                <td ng-class="{selected: item.checked==true}">{{ eachEntry.quantity }}</td>#}
+{#		                <td ng-class="{selected: item.checked==true}" class="center">{{ eachEntry.price }}</td>#}
+{#		                <td class="center"><i class="icon-cross delete" ng-click="remove(item)"></i>X</td>#}
+{#                        </tr>#}
+{#                    {% endfor %}#}
+{#              </div>#}
+{#		      </table>#}
+{#		      <div ng-hide="list.length" class="center">Your shopping list is empty.</div>#}
+		    </div>
+              <button id="clearAll" class="clear" ng-click="clearAll(list)">Clear Shopping List</button>
+    </div>
+
+		</div>
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  </body>
+</html>
+
+<style>
+
+
+.left { text-align: left!important }
+.center { text-align: center!important }
+.right { text-align: right!important }
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  height: 100%;
+}
+
+.box {
+  width: 100%;
+  background: #f3f3f3;
+  margin: 0 auto 2em auto;
+  overflow: auto;
+  padding: 1em;
+  border-radius: 3px;
+  display: inline-block;
+  vertical-align: top;
+
+    &:first-child{
+      margin-right: 1%;
+    }
+}
+
+h1 {
+  color: #3a3a3a;
+  text-align: center;
+  margin: 1em 0;
+}
+
+table {
+  border: none;
+  outline: none;
+  width: 100%;
+  margin: 0.5em 0 1em;
+
+  tr.table-header {
+    td {
+      font-size: 0.7em;
+      font-weight: bolder;
+    }
+  }
+
+  td {
+    padding: 0.75em 0.5em;
+  }
+
+  td:first-child {
+    text-align: left;
+  }
+
+  td:nth-child(3){
+    text-align: center;
+  }
+
+  td:last-child, td:nth-child(4){
+    text-align: right;
+  }
+
+  tr:nth-child(2n+2){
+    background: darken(#eee, 1%);
+  }
+}
+
+.searchButton {
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  outline: none;
+  padding: 1em;
+  border-radius: 3px;
+  font-weight: 300;
+  font-size: 0.8em;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  position: relative;
+}
+
+.margin-right {
+  margin-right: 1%;
+}
+
+.half {
+  width: 49.5%;
+  display: inline-block;
+
+  input {
+    width: 100%;
+  }
+}
+
+.half:first-child {
+  margin-right: 2%;
+}
+
+.selected {
+  text-decoration: line-through;
+  color: #aaa;
+}
+
+.dollar {
+  position: relative;
+  display: inline-block;
+}
+
+.dollar input {
+  padding-left: 2em;
+}
+
+.dollar span {
+  position: absolute;
+  display: block;
+  padding: 3px 3px 3px 7px;
+  pointer-events: none;
+  left: 5px; top: 13px;
+  color: #aaa;
+  z-index: 1;
+}
+
+.searchButton.full {
+  width: 100%;
+}
+
+.list {
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+
+  ul {
+
+    li {
+      margin: 1em 0;
+    }
+  }
+}
+
+.inventory h1 {
+  color: #3a3a3a;
+  padding-top: 5px;
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+
+}
+
+input[type='checkbox']{
+  background: transparent;
+  border: 2px solid #3a3a3a;
+  padding: 0.2em;
+  font-size: 1em;
+}
+
+button.clear {
+  background: lighten($navy, 6%);
+  border-bottom: 4px solid darken($navy, 5%);
+}
+
+button.clear:hover {
+  background: lighten($navy, 2%);
+  border-bottom: 2px solid darken($navy, 5%);
+}
+
+button {
+  margin: 0.25em 0;
+  display: block;
+  outline: none;
+  background: #428bca;
+  border: none;
+  padding: 1.1em;
+  border-radius: 6px;
+  width: 100%;
+  color: white;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 4px solid darken($red, 5%);
+
+    &:hover {
+      border-bottom: 2px solid darken($red, 5%);
+      margin-bottom: 0.9em;
+      @include box-shadow(inset 0 0 10px 0px rgba(black, 0.2));
+    }
+
+}
+
+.cost {
+  margin-bottom: 1em;
+
+  span {
+    padding: 0.5em;
+
+    &:first-child {
+      float: left;
+    }
+
+    &:nth-child(2){
+      float: right;
+      vertical-align: baseline;
+    }
+  }
+}
+
+.total {
+
+  background: $red;
+  color: white;
+  font-weight: bolder;
+  border-radius: 5px;
+}
+
+#successMessage, #errorMessage {
+  display: none;
+  text-align: center;
+  margin: 0.5em 0;
+  @include transition(display 0.3s ease);
+
+}
+
+i {
+    vertical-align: baseline;
+    margin-right: 0.5em;
+    border-radius: 50%;
+    width: 0.5em; height: 0.5em;
+    padding: 0.5em;
+    font-size: 0.8em;
+    color: white;
+}
+
+i.icon-checkmark {
+  background: green;
+}
+
+i.icon-cross {
+  background: red;
+}
+
+i.delete {
+  color: lighten($red, 8%);
+  background: transparent;
+  font-size: 1.1em;
+  vertical-align: sub;
+  cursor: pointer;
+
+  &:hover {
+    color: darken($red, 8%);
+  }
+}
+
+#successMessage {
+  color: green;
+}
+
+#errorMessage {
+  color: red;
+}
+
+
+@media (max-width: 800px) {
+  .box {
+    width: 100%;
+    display: block;
+  }
+}
+
+
+
+/* Clearfix */
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
+</style>
+
+<script>
+
+</script>
+
+<script src="/static/shoppingListApp/home.js"></script>
