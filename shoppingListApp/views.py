@@ -19,11 +19,13 @@ def incomingSMS(request):
         content = request.POST.get('Body', '')
         #if phoneNumber not recognized, prompt to create new account or associate # with account
         try:
-            person = profile.objects.get(number=fromNum)
-            sendSMSServer("Hello "+person.user.username)
+            print fromNum[2:]
+            person = profile.objects.get(number=fromNum[2:])
+            print "after person dec"
+            sendSMSServer("Hello "+person.user.username, fromNum)
         except:
             print "new user"
-            newUserMessage = "Welcome to shoppingList. We don't recognize your phone number. If you would like to use this service please respond with NewUser *username *password* *firstname* *lastname*"
+            newUserMessage = "Welcome to shoppingList. We don't recognize your phone number. If you would like to use this service please respond with 'NewUser *username* *password* *firstname* *lastname*'"
             sendSMSServer(newUserMessage, fromNum)
         #if recognized, parse message
             #create list "listname"
