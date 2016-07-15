@@ -48,7 +48,8 @@ def routeResponse(fromNum, content, person):
 def createList(fromNum, content, person):
     #createList Groceries
     listName = content[1]
-    newList = list(listName=listName, owner=person)
+    slug = listName
+    newList = list(listName=listName, owner=person, slug=slug)
     newList.save()
     sendSMSServer("List: " + listName + " has been created by " + person.user.username, fromNum)
 
