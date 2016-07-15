@@ -19,48 +19,38 @@ def incomingSMS(request):
         content = request.POST.get('Body', '')
         #if phoneNumber not recognized, prompt to create new account or associate # with account
         try:
-            print fromNum[2:]
             person = profile.objects.get(number=fromNum[2:])
-            # if recognized, parse message
-                # create list "listname"
-            content = content.split()
-            if content[0] == "create":
-                sendSMSServer("Creating list", fromNum)
-            elif content[0] == "get":
-                sendSMSServer("Getting List", fromNum)
-            elif content[0] == "clear":
-                sendSMSServer("Clearing list", fromNum)
-            elif content[0] == "add":
-                sendSMSServer("Adding to list", fromNum)
-                # get list "listname"
-                # clear list "listname"
-                # add 3 eggs to "listname"
-            #sendSMSServer("Hello "+person.user.username, fromNum)
+            routeResponse(fromNum, content, person)
         except:
             print "new user"
             newUserMessage = "Welcome to shoppingList. We don't recognize your phone number. If you would like to use this service please respond with 'NewUser *username* *password* *firstname* *lastname*'"
             sendSMSServer(newUserMessage, fromNum)
-
-        # print "all =", request
-        # print "PRINTING ", request.body
-        # currentUser = User.objects.get(username="marcusg")
-        # currentProfile = profile.objects.get(user=currentUser)
-        # content = request.POST.get('Body', '') #action=wallpost, body="this is the body text"
-        # content = json.loads(content)
-        # action = content['action']
-        # body = content['body']
-        # if action == "wallpost":
-        #     currentUser = User.objects.get(username="SMSBot")
-        #     newPost = wallPost(postSender=currentUser, postReceiver=currentUser, content=body)
-        #     newPost.save()
-        # if action == "postuser":
-        #     sendTo = User.objects.get(username=content['user'])
-        #     currentUser = User.objects.get(username="SMSBot")
-        #     newPost = wallPost(postSender=currentUser, postReceiver=sendTo, content=body)
-        #     newPost.save()
-        # #currentProfile.aboutMe = action + "%%" + body
-        # currentProfile.save()
         return HttpResponse("done")
+
+def routeResponse(fromNum, content, person):
+    content = content.split()
+    if content[0] == "createList":
+        sendSMSServer("Creating list", fromNum)
+        createList(fromNum, content, person)
+    elif content[0] == "get":
+        sendSMSServer("Getting List", fromNum)
+        getList(fromNum, content, person)
+    elif content[0] == "clear":
+        sendSMSServer("Clearing list", fromNum)
+        clearList(fromNum, content, person)
+    elif content[0] == "add":
+        sendSMSServer("Adding to list", fromNum)
+        addToList(fromNum, content, person)
+    elif content[0] == "deleteList":
+        sendSMSServer("Deleting list", fromNum)
+        deleteList(fromNum, content, person)
+
+def createList(fromNum, content, person):
+    #createList Groceries
+    listName = content[1]
+    newList = list.objects(listName = listName, owner=person)
+    newList.save()
+    sendSMSServer("List: " + listName + " has been created by " + person.user.username, fromNum)
 
 def signUpLogIn(request):
     if request.user.is_authenticated():
