@@ -49,7 +49,7 @@ def addToList(fromNum, content, person):
     #add Eggs to Groceries
     itemName = content[1]
     listName = content[3]
-    currentList = list.objects.filter(owner=person, listName = listName)
+    currentList = list.objects.get(owner=person, listName = listName)
     newEntry = listEntry(itemName=itemName, listActual=currentList)
     newEntry.save()
     sendSMSServer("Item: " + itemName + " has been added to " + listName + " by " + person.user.username, fromNum)
