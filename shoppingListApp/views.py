@@ -18,11 +18,10 @@ def incomingSMS(request):
         fromNum = request.POST.get('From', '')
         content = request.POST.get('Body', '')
         #if phoneNumber not recognized, prompt to create new account or associate # with account
-        #try:
-        if 1 == 1:
+        try:
             person = profile.objects.get(number=fromNum[2:])
             routeResponse(fromNum, content, person)
-        #except:
+        except:
             print "new user"
             newUserMessage = "Welcome to shoppingList. We don't recognize your phone number. If you would like to use this service please respond with 'NewUser *username* *password* *firstname* *lastname*'"
             sendSMSServer(newUserMessage, fromNum)
@@ -53,7 +52,7 @@ def getList(fromNum, content, person):
     listEntries = listEntry.objects.filter(listActual=currentList)
     returnMe = currentList.listName + " list: %0a"
     for eachEntry in listEntries:
-        returnme = returnme + eachEntry.itemName + "%0a"
+        returnMe = returnMe + eachEntry.itemName + "%0a"
     sendSMSServer(returnMe, fromNum)
 
 def addToList(fromNum, content, person):
