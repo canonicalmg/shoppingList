@@ -83,6 +83,24 @@ def home(request, string):
         #login
         return HttpResponseRedirect("/")
 
+def homeNone(request):
+    if request.user.is_authenticated():
+        template = loader.get_template('home.html')
+        allLists = list.objects.filter(owner=request.user)
+        currentList = allLists.first()
+        currentSlug = currentList.slug
+        listItems = listEntry.objects.filter(listActual=currentList)
+        context = {
+            "currentListName": currentList.listName,
+            "currentSlug": currentSlug,
+            "listItems": listItems,
+            "lists": allLists
+        }
+        return HttpResponse(template.render(context, request))
+    else:
+        #login
+        return HttpResponseRedirect("/")
+
 def addItemShoppingCart(request):
     if request.is_ajax():
         if request.method == "POST":
