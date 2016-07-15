@@ -73,7 +73,7 @@ def routeResponse(fromNum, content, person):
     #     sendSMSServer("Deleting item", fromNum)
     #     deleteList(fromNum, content, person)
     else:
-        sendSMSServer("Command not recognized.", fromNum)
+        sendSMSServer("Command not recognized.\n" + commandListAlert(), fromNum)
 
 def commandListAlert():
     commandList = "createList *listname*"
