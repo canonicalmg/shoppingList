@@ -35,7 +35,22 @@ def incomingSMS(request):
 
 def newUser(content, fromNum):
     #'NewUser *username* *password* *firstname* *lastname*'
-    print "in"
+    username = content[1]
+    password = content[2]
+    firstname = content[3]
+    lastname = content[4]
+    newUser = User.objects.create_user(username, email=None, password=password)
+    newUser.first_name = firstname
+    newUser.last_name = lastname
+    newUser.save()
+
+    newUser = User.objects.get(username=username)
+    newProfile = profile(user=newUser, number=fromNum)
+    newProfile.save()
+
+    userMessage = "Welcome, " + firstname + ". Account: " + username + " has been created.\n"
+    userMessage = userMessage + commandListAlert()
+    sendSMSServer(userMessage, fromNum)
 
 def routeResponse(fromNum, content, person):
     content = content.split()
@@ -45,7 +60,7 @@ def routeResponse(fromNum, content, person):
     elif content[0].lower() == "get":
         sendSMSServer("Getting List", fromNum)
         getList(fromNum, content, person)
-    # elif content[0] == "clear":
+    # elif content[0].lower() == "clear":
     #     sendSMSServer("Clearing list", fromNum)
     #     clearList(fromNum, content, person)
     elif content[0].lower() == "add":
@@ -54,8 +69,21 @@ def routeResponse(fromNum, content, person):
     # elif content[0] == "deleteList":
     #     sendSMSServer("Deleting list", fromNum)
     #     deleteList(fromNum, content, person)
+    # elif content[0] == "deleteItem":
+    #     sendSMSServer("Deleting item", fromNum)
+    #     deleteList(fromNum, content, person)
     else:
         sendSMSServer("Command not recognized.", fromNum)
+
+def commandListAlert():
+    commandList = "createList *listname*"
+    commandList = commandList + "\nget *listname*"
+    commandList = commandList + "\nadd *item* to *listname*"
+    commandList = commandList + "\nclear *listname*"
+    commandList = commandList + "\ndeleteList *listname*"
+    commandList = commandList + "\ndeleteItem *itemName* from *listname*"
+
+    return commandList
 
 def getList(fromNum, content, person):
     #get Groceries
