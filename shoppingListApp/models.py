@@ -18,7 +18,7 @@ class profile(models.Model):
 
 class list(models.Model):
     listName = models.CharField(max_length=300)
-    slug = models.CharField(max_length=300)
+    slug = models.SlugField()
     owner = models.ForeignKey(profile)
 
     def save(self, *args, **kwargs):
