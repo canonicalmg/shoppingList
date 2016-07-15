@@ -5,8 +5,43 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login, logout
 from django.template.defaultfilters import slugify
 from .models import list, listEntry
+from twilio.rest import TwilioRestClient
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
+
+@csrf_exempt
+def incomingSMS(request):
+    if request.method == "POST":
+        #if phoneNumber not recognized, prompt to create new account or associate # with account
+
+        #if recognized, parse message
+            #create list "listname"
+            #get list "listname"
+            #clear list "listname"
+            #add 3 eggs to "listname"
+
+        # print "all =", request
+        # print "PRINTING ", request.body
+        # currentUser = User.objects.get(username="marcusg")
+        # currentProfile = profile.objects.get(user=currentUser)
+        # content = request.POST.get('Body', '') #action=wallpost, body="this is the body text"
+        # content = json.loads(content)
+        # action = content['action']
+        # body = content['body']
+        # if action == "wallpost":
+        #     currentUser = User.objects.get(username="SMSBot")
+        #     newPost = wallPost(postSender=currentUser, postReceiver=currentUser, content=body)
+        #     newPost.save()
+        # if action == "postuser":
+        #     sendTo = User.objects.get(username=content['user'])
+        #     currentUser = User.objects.get(username="SMSBot")
+        #     newPost = wallPost(postSender=currentUser, postReceiver=sendTo, content=body)
+        #     newPost.save()
+        # #currentProfile.aboutMe = action + "%%" + body
+        # currentProfile.save()
+        return HttpResponse("done")
+
 def signUpLogIn(request):
     if request.user.is_authenticated():
         #send them to /home
@@ -74,3 +109,19 @@ def clearAll(request):
                 eachEntry.delete()
 
             return HttpResponse("entries deleted")
+
+def sendSMS(request):
+    if request.is_ajax():
+        if request.method == "POST":
+            # data = request.POST.getlist("data[]")
+            # sendTo = data[0] #userName
+            # print "sending to ", sendTo
+            # sendTo = profile.objects.get(user=User.objects.get(username=sendTo)).phoneNumber
+            # sendMessage = data[1]
+            # account_sid = "ACcf14924e06a090cabdf9a228a951a09b"
+            # auth_token = "8f6a198971603870cefc7855b4b31e62"
+            # client = TwilioRestClient(account_sid, auth_token)
+            #
+            # message = client.messages.create(to="+1"+sendTo, from_="+12096907178",
+            #                                 body=sendMessage + " - from " + request.user.username)
+            return HttpResponse("Sent.")
