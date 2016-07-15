@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login, logout
 from django.template.defaultfilters import slugify
 from .models import list, listEntry
-from twilio.rest import TwilioRestClient
+#from twilio.rest import TwilioRestClient
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
