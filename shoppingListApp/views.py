@@ -38,12 +38,21 @@ def routeResponse(fromNum, content, person):
     # elif content[0] == "clear":
     #     sendSMSServer("Clearing list", fromNum)
     #     clearList(fromNum, content, person)
-    # elif content[0] == "add":
-    #     sendSMSServer("Adding to list", fromNum)
-    #     addToList(fromNum, content, person)
+    elif content[0] == "add":
+        sendSMSServer("Adding to list", fromNum)
+        addToList(fromNum, content, person)
     # elif content[0] == "deleteList":
     #     sendSMSServer("Deleting list", fromNum)
     #     deleteList(fromNum, content, person)
+
+def addToList(fromNum, content, person):
+    #add Eggs to Groceries
+    itemName = content[1]
+    listName = content[3]
+    currentList = list.objects.filter(owner=person, listName = listName)
+    newEntry = listEntry(itemName=itemName, listActual=currentList)
+    newEntry.save()
+    sendSMSServer("Item: " + itemName + " has been added to " + listName + " by " + person.user.username, fromNum)
 
 def createList(fromNum, content, person):
     #createList Groceries

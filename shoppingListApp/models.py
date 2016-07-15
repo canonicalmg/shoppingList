@@ -32,9 +32,9 @@ class list(models.Model):
 class listEntry(models.Model):
     listActual = models.ForeignKey(list)
     itemName = models.CharField(max_length=50)
-    shopName = models.CharField(max_length=50)
-    quantity = models.CharField(max_length=10)
-    price = models.CharField(max_length=10)
+    shopName = models.CharField(max_length=50, blank=True)
+    quantity = models.CharField(max_length=10, blank=True)
+    price = models.CharField(max_length=10, blank=True)
 
     def __unicode__(self):
         return self.itemName + " - " + self.listActual.listName + " - " + self.listActual.owner.user.username
