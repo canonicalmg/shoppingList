@@ -32,23 +32,23 @@ def routeResponse(fromNum, content, person):
     if content[0] == "createList":
         sendSMSServer("Creating list", fromNum)
         createList(fromNum, content, person)
-    elif content[0] == "get":
-        sendSMSServer("Getting List", fromNum)
-        getList(fromNum, content, person)
-    elif content[0] == "clear":
-        sendSMSServer("Clearing list", fromNum)
-        clearList(fromNum, content, person)
-    elif content[0] == "add":
-        sendSMSServer("Adding to list", fromNum)
-        addToList(fromNum, content, person)
-    elif content[0] == "deleteList":
-        sendSMSServer("Deleting list", fromNum)
-        deleteList(fromNum, content, person)
+    # elif content[0] == "get":
+    #     sendSMSServer("Getting List", fromNum)
+    #     getList(fromNum, content, person)
+    # elif content[0] == "clear":
+    #     sendSMSServer("Clearing list", fromNum)
+    #     clearList(fromNum, content, person)
+    # elif content[0] == "add":
+    #     sendSMSServer("Adding to list", fromNum)
+    #     addToList(fromNum, content, person)
+    # elif content[0] == "deleteList":
+    #     sendSMSServer("Deleting list", fromNum)
+    #     deleteList(fromNum, content, person)
 
 def createList(fromNum, content, person):
     #createList Groceries
     listName = content[1]
-    newList = list.objects(listName = listName, owner=person)
+    newList = list(listName=listName, owner=person)
     newList.save()
     sendSMSServer("List: " + listName + " has been created by " + person.user.username, fromNum)
 
