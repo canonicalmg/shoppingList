@@ -4,17 +4,27 @@ from django.template import loader
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login, logout
 from django.template.defaultfilters import slugify
-from .models import list, listEntry
+from .models import list, listEntry, profile
 from twilio.rest import TwilioRestClient
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth import logout as auth_logout
+from django.core.urlresolvers import reverse, resolve
+from django.shortcuts import redirect, get_object_or_404, render
 # Create your views here.
 
 @csrf_exempt
 def incomingSMS(request):
     if request.method == "POST":
+        fromNum = request.POST.get('From', '')
+        content = request.POST.get('Body', '')
         #if phoneNumber not recognized, prompt to create new account or associate # with account
-
+        try:
+            person = profile.objects.get(number=fromNum)
+            sendSMSServer("Hello "+person.user.username)
+        except:
+            print "new user"
+            newUserMessage = "Welcome to shoppingList. We don't recognize your phone number. If you would like to use this service please respond with NewUser *username *password* *firstname* *lastname*"
+            sendSMSServer(newUserMessage, fromNum)
         #if recognized, parse message
             #create list "listname"
             #get list "listname"
@@ -69,8 +79,9 @@ def headerSignIn(request):
 def home(request, string):
     if request.user.is_authenticated():
         template = loader.get_template('home.html')
-        allLists = list.objects.filter(owner=request.user)
-        currentList = list.objects.get(owner=request.user, slug=string)
+        currentProfile = profile.objects.get(user=request.user)
+        allLists = list.objects.filter(owner=currentProfile)
+        currentList = list.objects.get(owner=currentProfile, slug=string)
         listItems = listEntry.objects.filter(listActual=currentList)
         context = {
             "currentListName": currentList.listName,
@@ -86,7 +97,8 @@ def home(request, string):
 def homeNone(request):
     if request.user.is_authenticated():
         template = loader.get_template('home.html')
-        allLists = list.objects.filter(owner=request.user)
+        currentProfile = profile.objects.get(user=request.user)
+        allLists = list.objects.filter(owner=currentProfile)
         currentList = allLists.first()
         currentSlug = currentList.slug
         listItems = listEntry.objects.filter(listActual=currentList)
@@ -110,8 +122,8 @@ def addItemShoppingCart(request):
             quantity = data[2]
             price = data[3]
             slug = data[4]
-
-            currentList = list.objects.get(owner=request.user, slug=slug) #change this later
+            currentProfile = profile.objects.get(user=request.user)
+            currentList = list.objects.get(owner=currentProfile, slug=slug) #change this later
             entry = listEntry(itemName=itemName, shopName=shopName, quantity=quantity, price=price, listActual=currentList)
             entry.save()
 
@@ -143,3 +155,15 @@ def sendSMS(request):
             # message = client.messages.create(to="+1"+sendTo, from_="+12096907178",
             #                                 body=sendMessage + " - from " + request.user.username)
             return HttpResponse("Sent.")
+
+def sendSMSServer(message, sendTo):
+    account_sid = "AC60484fbea67e2c83280f90f9aa53c390"
+    auth_token = "ebb9a82b47931ff2d02fb287c72d4ea3"
+    client = TwilioRestClient(account_sid, auth_token)
+
+    message = client.messages.create(to="+1"+sendTo, from_="+19258607247",
+                                    body=message)
+
+def logout(request):
+    auth_logout(request)
+    return HttpResponseRedirect("/")
