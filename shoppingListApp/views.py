@@ -39,21 +39,23 @@ def newUser(content, fromNum):
 
 def routeResponse(fromNum, content, person):
     content = content.split()
-    if content[0] == "createList":
+    if content[0].lower() == "createList":
         sendSMSServer("Creating list", fromNum)
         createList(fromNum, content, person)
-    elif content[0] == "get":
+    elif content[0].lower() == "get":
         sendSMSServer("Getting List", fromNum)
         getList(fromNum, content, person)
     # elif content[0] == "clear":
     #     sendSMSServer("Clearing list", fromNum)
     #     clearList(fromNum, content, person)
-    elif content[0] == "add":
+    elif content[0].lower() == "add":
         sendSMSServer("Adding to list", fromNum)
         addToList(fromNum, content, person)
     # elif content[0] == "deleteList":
     #     sendSMSServer("Deleting list", fromNum)
     #     deleteList(fromNum, content, person)
+    else:
+        sendSMSServer("Command not recognized.", fromNum)
 
 def getList(fromNum, content, person):
     #get Groceries
