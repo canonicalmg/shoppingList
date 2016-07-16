@@ -48,13 +48,12 @@ def newUser(content, fromNum):
     newProfile = profile(user=newUser, number=fromNum)
     newProfile.save()
 
-    userMessage = "Welcome, " + firstname + ". Account: " + username + " has been created.\n"
-    userMessage = userMessage + commandListAlert()
+    userMessage = "Welcome, " + firstname + ". Account: " + username + " has been created.\n Get started by creating your first list. Respond with 'createList *listName*'"
     sendSMSServer(userMessage, fromNum)
 
 def routeResponse(fromNum, content, person):
     content = content.split()
-    if content[0].lower() == "createList":
+    if content[0].lower() == "createlist":
         sendSMSServer("Creating list", fromNum)
         createList(fromNum, content, person)
     elif content[0].lower() == "get":
