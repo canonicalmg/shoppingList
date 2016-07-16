@@ -19,7 +19,7 @@ def incomingSMS(request):
         content = request.POST.get('Body', '')
         #if phoneNumber not recognized, prompt to create new account or associate # with account
         try:
-            person = profile.objects.get(number=fromNum[2:])
+            person = profile.objects.get(number=fromNum[1:])
             routeResponse(fromNum, content, person)
         except:
             print "new user"

@@ -16,6 +16,9 @@ class profile(models.Model):
     number = models.CharField(validators=[phone_regex], blank=True, max_length=15)
     user = models.ForeignKey(User)
 
+    def __unicode__(self):
+        return self.user.username
+
 class list(models.Model):
     listName = models.CharField(max_length=300)
     slug = models.SlugField()
