@@ -18,6 +18,7 @@ def incomingSMS(request):
         fromNum = request.POST.get('From', '')
         content = request.POST.get('Body', '')
         #if phoneNumber not recognized, prompt to create new account or associate # with account
+        print fromNum
         try:
             person = profile.objects.get(number=fromNum[1:])
             routeResponse(fromNum, content, person)
