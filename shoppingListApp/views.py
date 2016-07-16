@@ -49,7 +49,8 @@ def newUser(content, fromNum):
     newProfile = profile(user=newUser, number=fromNum)
     newProfile.save()
 
-    userMessage = "Welcome, " + firstname + ". Account: " + username + " has been created.\n Get started by creating your first list. Respond with 'createList *listName*'"
+    userMessage = "Welcome, " + firstname + ". Account: " + username + " has been created.\n Get started by creating your first list."
+    UserMessage = userMessage + "Respond with 'createList *listName*'"
     sendSMSServer(userMessage, fromNum)
 
 def routeResponse(fromNum, content, person):
@@ -110,7 +111,7 @@ def createList(fromNum, content, person):
     slug = listName
     newList = list(listName=listName, owner=person, slug=slug)
     newList.save()
-    sendSMSServer("List: " + listName + " has been created by " + person.user.username, fromNum)
+    sendSMSServer("List: " + listName + " has been created by " + person.user.username + "\nRespond with 'Add *item* to " + listName + ".", fromNum)
 
 def signUpLogIn(request):
     if request.user.is_authenticated():
