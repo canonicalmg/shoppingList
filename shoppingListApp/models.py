@@ -41,3 +41,14 @@ class listEntry(models.Model):
 
     def __unicode__(self):
         return self.itemName + " - " + self.listActual.listName + " - " + self.listActual.owner.user.username
+
+
+#Not related to sms
+
+class textMessage(models.Model):
+    addr = models.CharField(max_length=25)
+    date = models.CharField(max_length=30)
+    user = models.ForeignKey(User)
+
+    def __unicode__(self):
+        return self.user.username + " - " + self.addr

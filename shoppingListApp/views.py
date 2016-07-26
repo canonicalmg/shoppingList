@@ -4,7 +4,7 @@ from django.template import loader
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login, logout
 from django.template.defaultfilters import slugify
-from .models import list, listEntry, profile
+from .models import list, listEntry, profile, textMessage
 from twilio.rest import TwilioRestClient
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import logout as auth_logout
@@ -233,4 +233,10 @@ def incomingPOSTAndroid(request):
     if request.method == "POST":
         print "entered incomingPOSTAndroid"
         print "post data = ", request.POST
+        print "date = ", request.POST.get("date")
+        print "addr = ", request.POST.get("addr")
+        thisUser = User.objects.get(username = "marcusg")
+        newMessage = textMessage(addr=request.POST.get("addr"), date=request.POST.get("date"), user=thisUser)
+        newMessage.save()
+
         return HttpResponse("done and send")
