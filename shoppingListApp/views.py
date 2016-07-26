@@ -65,7 +65,6 @@ def routeResponse(fromNum, content, person):
     #     sendSMSServer("Clearing list", fromNum)
     #     clearList(fromNum, content, person)
     elif content[0].lower() == "add":
-        sendSMSServer("Adding to list", fromNum)
         addToList(fromNum, content, person)
     # elif content[0] == "deleteList":
     #     sendSMSServer("Deleting list", fromNum)
@@ -228,3 +227,10 @@ def sendSMSServer(message, sendTo):
 def logout(request):
     auth_logout(request)
     return HttpResponseRedirect("/")
+
+@csrf_exempt
+def incomingPOSTAndroid(request):
+    if request.method == "POST":
+        print "entered incomingPOSTAndroid"
+        print "post data = ", request.POST
+        return HttpResponse("done")
