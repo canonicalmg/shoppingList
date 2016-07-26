@@ -233,4 +233,4 @@ def incomingPOSTAndroid(request):
     if request.method == "POST":
         print "entered incomingPOSTAndroid"
         print "post data = ", request.POST
-        return HttpResponse("done")
+        return HttpResponse("done and send")
